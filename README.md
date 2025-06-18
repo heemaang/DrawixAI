@@ -1,171 +1,155 @@
-# DarwixAI
-## Task 1: Overview
+# 🧠 DarwixAI – Audio Transcription & Blog Title Suggestion API
 
-Task 1 focuses on establishing the foundational components of the DarwixAI project. This task is critical for setting the stage for future development and ensuring a robust and scalable architecture.
+DarwixAI is a FastAPI-based service that provides:
 
-### Objectives
-- **Define the Core Architecture**: Establish a modular and scalable architecture that supports future enhancements.
-- **Implement Initial Features**: Develop the essential features required for the project's foundation.
-- **Ensure Scalability**: Design the system to accommodate future tasks and integrations seamlessly.
-
-### Steps
-1. **Set Up the Development Environment**:
-    - Install necessary tools and dependencies.
-    - Configure version control and CI/CD pipelines.
-2. **Create the Base Project Structure**:
-    - Define folder structures and naming conventions.
-    - Set up configuration files and initial boilerplate code.
-3. **Implement and Test Core Functionalities**:
-    - Develop the primary modules and components.
-    - Write unit tests and perform integration testing.
-
-### Deliverables
-- A functional prototype of the foundational components.
-- Comprehensive documentation covering:
-  - Setup instructions.
-  - Usage guidelines.
-  - Architectural decisions.
-
-### Timeline
-- **Estimated Completion**: 1 Hour.
-- **Milestones**:
-  - Week 1: Environment setup and project structure creation.
-  - Week 2: Core functionalities implementation and testing.
-
-### Notes
-- Adhere to the project's coding standards and best practices.
-- Ensure all code is thoroughly tested and reviewed before submission.
-- Document any challenges or deviations from the initial plan for future reference.
-- Use version control effectively to track progress and collaborate efficiently.
-- Regularly update the team on progress during stand-up meetings or via the project management tool.
-- Seek feedback on the prototype to refine and improve the implementation.
-
-Task 2
-
-🧠 Blog Title Suggestion API with Django & Hugging Face Transformers
-
-This project is a RESTful API built with Django and Django REST Framework that suggests catchy blog titles using a Hugging Face transformer model (GPT-2 by default).
+- 🎙️ **Speech-to-Text Transcription** using Groq’s Whisper model  
+- 📝 **Blog Title Generation** using Groq’s LLaMA3 model
 
 ---
 
 ## 🚀 Features
 
-- Accepts blog content via a POST request
-- Generates 3 relevant title suggestions using NLP
-- Runs locally using Django development server
-- Easily extendable to other text generation models
+- Accepts MP3/WAV audio files for transcription  
+- Returns clean text from spoken words  
+- Suggests 3 relevant blog titles from any content  
+- Docker-compatible & easy to deploy (e.g., Render)
 
 ---
 
-## 🏗️ Project Structure
+## 🗂️ Folder Structure
 
-blogtitler/ ├── blogtitler/ │ ├── init.py │ ├── settings.py │ ├── urls.py │ └── wsgi.py ├── titlesuggest/ │ ├── init.py │ ├── views.py │ ├── model_handler.py │ ├── urls.py │ └── apps.py ├── manage.py ├── run.py ├── requirements.txt └── README.md
-
-yaml
-Copy
-Edit
+```
+DrawixAI/
+│
+├── app.py                    # Main FastAPI app
+├── stt_model.py              # Whisper transcription logic (Groq)
+├── requirements.txt          # Python dependencies
+├── Dockerfile                # Docker image setup
+├── .env                      # API key configs (not committed)
+├── nginx.conf                # Reverse proxy (optional)
+├── setup_tunnel.ps1          # Ngrok script for local exposure
+├── Transcription.ipynb       # Jupyter notebook (testing)
+├── transcription_output.json # Sample JSON output from Whisper
+├── README.md                 # This file
+├── convo.mp3                 # Test audio (optional)
+└── .gitignore                # Files/folders to ignore in Git
+```
 
 ---
 
-## 🛠 Installation
+## 🛠️ Setup (Locally)
 
-### 1. Clone the repository
+### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/blogtitler.git
-cd blogtitler
-2. Create a virtual environment
-bash
-Copy
-Edit
-python -m venv venv
-source venv/bin/activate  # or venv\Scripts\activate on Windows
-3. Install dependencies
-bash
-Copy
-Edit
-pip install -r requirements.txt
-⚙️ Setup
-1. Apply migrations
-bash
-Copy
-Edit
-python manage.py migrate
-2. Run the development server
-bash
-Copy
-Edit
-python manage.py runserver
-Server will be live at: http://127.0.0.1:8000/
+git clone https://github.com/heemaang/DrawixAI.git
+cd DrawixAI
+```
 
-🔁 API Usage
-Endpoint
-bash
-Copy
-Edit
-POST /api/suggest-titles/
-Request Body
-json
-Copy
-Edit
+### 2. Create a Virtual Environment & Install Requirements
+
+```bash
+python -m venv venv
+source venv/bin/activate   # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+### 3. Configure Environment Variables
+
+Create a `.env` file in the root directory:
+
+```
+GROQ_API_KEY=your_groq_api_key
+API_KEY=MY_SUPER_SECRET
+```
+
+---
+
+## ▶️ Running the App Locally
+
+```bash
+uvicorn app:app --host 0.0.0.0 --port 8080
+```
+
+Your app will now be running at:  
+**🌐 http://localhost:8080**
+
+---
+
+## 🔁 API Endpoints (Local)
+
+### 🎙️ /transcribe
+
+- **Method:** POST  
+- **URL:** `http://localhost:8080/transcribe`  
+- **Headers:**  
+  - `x-api-key: MY_SUPER_SECRET`  
+- **Body (form-data):**  
+  - `file`: MP3/WAV audio file
+
+**Sample cURL:**
+
+```bash
+curl -X POST http://localhost:8080/transcribe \
+  -H "x-api-key: MY_SUPER_SECRET" \
+  -F "file=@convo.mp3"
+```
+
+---
+
+### 📝 /api/suggest-titles
+
+- **Method:** POST  
+- **URL:** `http://localhost:8080/api/suggest-titles`  
+- **Headers:**  
+  - `x-api-key: MY_SUPER_SECRET`  
+- **Body (JSON):**
+
+```json
 {
-  "content": "Your blog post content goes here..."
+  "text": "Artificial intelligence is transforming industries by automating complex tasks..."
 }
-Sample cURL
-bash
-Copy
-Edit
-curl -X POST http://127.0.0.1:8000/api/suggest-titles/ \
--H "Content-Type: application/json" \
--d '{"content":"A guide to deploying ML models in Django apps."}'
-Response
-json
-Copy
-Edit
+```
+
+**Response:**
+
+```json
 {
-  "titles": [
-    "Deploying Machine Learning Models with Django",
-    "How to Serve ML Models in Django Applications",
-    "End-to-End ML Deployment with Django Framework"
+  "suggestions": [
+    "How AI is Transforming Industries",
+    "The Rise of Automation in Modern Business",
+    "AI & the Future of Work"
   ]
 }
-🧪 Local Testing Without Server
-You can also run a test script without starting the Django server:
+```
 
-bash
-Copy
-Edit
-python run.py
-This uses Django's test framework to send a simulated request and prints the output directly in the console.
+---
 
-🧠 Model Details
-Uses Hugging Face transformers pipeline
+## 🐳 Docker Usage
 
-Default model: gpt2
+### Build & Run
 
-Easily replaceable with models like tiiuae/falcon, google/flan-t5-base, etc.
+```bash
+docker build -t darwixai .
+docker run -p 8080:8080 darwixai
+```
 
-📌 Requirements
-Python 3.8+
+---
 
-Django 4.x
+## ☁️ Render Deployment
 
-Transformers
+1. Go to [https://render.com](https://render.com)
+2. Create new Web Service
+3. Connect your GitHub repo
+4. Set:
+   - **Environment:** Docker
+   - **Root Directory:** (leave blank if project is in root)
+   - **Environment Variables:**
+     - `GROQ_API_KEY=your_key`
+     - `API_KEY=MY_SUPER_SECRET`
 
-Torch
+---
 
-Django REST Framework
+## 📄 License
 
-See requirements.txt for versions.
-
-🧰 Extending the Project
-Swap gpt2 with other Hugging Face models
-
-Add authentication or rate limiting
-
-Integrate a frontend (e.g., React or HTML)
-
-Deploy using Docker, Gunicorn, or on cloud platforms
-
-📄 License
-This project is licensed under the MIT License.
+MIT License © 2025 – Heemaang Saxena
