@@ -123,33 +123,3 @@ curl -X POST http://localhost:8080/transcribe \
 }
 ```
 
----
-
-## 🐳 Docker Usage
-
-### Build & Run
-
-```bash
-docker build -t darwixai .
-docker run -p 8080:8080 darwixai
-```
-
----
-
-## ☁️ Render Deployment
-
-1. Go to [https://render.com](https://render.com)
-2. Create new Web Service
-3. Connect your GitHub repo
-4. Set:
-   - **Environment:** Docker
-   - **Root Directory:** (leave blank if project is in root)
-   - **Environment Variables:**
-     - `GROQ_API_KEY=your_key`
-     - `API_KEY=MY_SUPER_SECRET`
-
----
-
-## 📄 License
-
-MIT License © 2025 – Heemaang Saxena
