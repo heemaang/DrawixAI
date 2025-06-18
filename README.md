@@ -24,10 +24,7 @@ DrawixAI/
 ├── app.py                    # Main FastAPI app
 ├── stt_model.py              # Whisper transcription logic (Groq)
 ├── requirements.txt          # Python dependencies
-├── Dockerfile                # Docker image setup
 ├── .env                      # API key configs (not committed)
-├── nginx.conf                # Reverse proxy (optional)
-├── setup_tunnel.ps1          # Ngrok script for local exposure
 ├── Transcription.ipynb       # Jupyter notebook (testing)
 ├── transcription_output.json # Sample JSON output from Whisper
 ├── README.md                 # This file
