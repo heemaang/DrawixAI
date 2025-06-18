@@ -66,27 +66,6 @@ ngrok http 8000
 lt --port 8000
 ```
 
-### Option B: Deploy to Cloud (stable production URL)
-
-#### Using Docker:
-```bash
-# Build the Docker image
-docker build -t stt-api .
-
-# Run the container
-docker run -p 8080:8080 -e GROQ_API_KEY=your_groq_api_key -e API_KEY=your_custom_api_key stt-api
-```
-
-#### Deploy to Railway:
-```bash
-railway init && railway up
-```
-
-#### Deploy to Render:
-1. Create a new "Web service"
-2. Connect to your Git repository
-3. Set the Start Command to: `uvicorn app:app --host 0.0.0.0 --port $PORT`
-4. Add environment variables for `GROQ_API_KEY` and `API_KEY`
 
 ## Security
 
